@@ -65,3 +65,7 @@ div span
     width:100px;
 }
 input[type=text] {width:400px;}
+
+.control {
+    margin-bottom: 5px;
+}

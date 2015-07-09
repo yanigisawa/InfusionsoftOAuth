@@ -29,9 +29,11 @@ namespace InfusionsoftOAuth.Controllers
             // Url encode CallbackUrl
             return Redirect(string.Format(authorizeUrlFormat, Server.UrlEncode(CallbackUrl), DeveloperAppKey));
         }
-        
+
         public ActionResult Callback(string code)
         {
+            TokenData tokenData = null;
+
             if (!string.IsNullOrEmpty(code))
             {
                 string tokenUrl = "https://api.infusionsoft.com/token";
@@ -62,12 +64,10 @@ namespace InfusionsoftOAuth.Controllers
 
                 var jsonSerializer = new JavaScriptSerializer();
 
-                var tokenData = jsonSerializer.Deserialize<TokenData>(resultJSON);
-
-                ViewData.Add("AccessToken", tokenData.Access_Token);
+                tokenData = jsonSerializer.Deserialize<TokenData>(resultJSON);
             }
 
-            return View();
+            return View(tokenData);
         }
 
         public ActionResult FindContact()
@@ -85,9 +85,14 @@ namespace InfusionsoftOAuth.Controllers
 
                 var contacts = contactService.LookupByEmail(DeveloperAppKey, email, new[] { "Id", "FirstName", "LastName" });
 
-                foreach (var contact in contacts)
+                foreach (XmlRpcStruct contact in contacts)
                 {
-                    viewData.Add(new Contact { Id = (int)contact["Id"], FirstName = (string)contact["FirstName"], LastName = (string)contact["LastName"]});
+                    viewData.Add(new Contact
+                    {
+                        Id = (int)contact["Id"],
+                        FirstName = contact.Contains("FirstName") ? (string)contact["FirstName"] : "NA",
+                        LastName = contact.Contains("LastName") ? (string)contact["LastName"] : "NA"
+                    });
                 }
 
             }

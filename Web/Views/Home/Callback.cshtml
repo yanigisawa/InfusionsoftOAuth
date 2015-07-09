@@ -1,8 +1,14 @@
-﻿
+﻿@model InfusionsoftOAuth.Models.TokenData
+
 <h2>Callback</h2>
 
 <form method="get" action="FindContact">
-    <div><span>Access Token</span> <input type="text" name="AccessToken" value="@ViewData["AccessToken"]" /></div>
-    <div><span>Email</span> <input type="text" name="Email" /></div>
+    <h3>OAuth Token Data</h3>
+    <div class='control'><span>Access Token</span> <input type="text" name="AccessToken" value="@Model.Access_Token" /></div>
+    <div class='control'><span>Refresh Token</span> <input type="text" name="RefreshToken" value="@Model.Refresh_Token" /></div>
+    <div class='control'><span>Expires In</span> <input type="text" name="ExpiresIn" value="@Model.Expires_In" /></div>
+    <div class='control'><span>Token Type</span> <input type="text" name="TokenType" value="@Model.Token_Type" /></div>
+    <h3>Email Search</h3>
+    <div class='control'><span>Email</span> <input type="text" name="Email" /></div>
     <input type="submit" value="Find Contact in Infusionsoft" />
 </form>
